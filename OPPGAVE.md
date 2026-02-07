@@ -36,6 +36,7 @@ flere til null eller flere.
 
 Deretter kan en gruppe gi tilgang til ett eller flere klasserom og en student kan bli lagt inn i en
 eller flere grupper av en bruker med rollen LÆERER. Dermed vil gruppen virke som en tilgangskontroll for klasserommet.
+Både studenter og lærere kan bli lagt inn i en gruppe.
 
 Videre kan brukere med rollen LÆRER skrive beskjeder til et klasserom og brukere med rollen STUDENTER kan lese dette
 betinget at de har riktig gruppetilhørighet. 
@@ -70,8 +71,64 @@ erDiagram
 **Oppgave:** Oversett den konseptuelle modellen til en logisk tabellstruktur. Spesifiser tabellnavn, attributter (kolonner), datatyper, primærnøkler (PK) og fremmednøkler (FK). Tegn et utvidet ER-diagram med [mermaid.live](https://mermaid.live/) eller eventuelt på papir.
 
 
-**Ditt svar:***
+**Ditt svar:**
 
+```mermaid
+---
+title: Datamodell
+config:
+  layout: elk
+---
+erDiagram
+    USER one or more to one or more CLASSROOM : "teacher makes"
+    GROUP zero or more to zero or more CLASSROOM : allows
+    USER zero or more to zero or more GROUP : "student assigned"
+    USER zero or more to zero or more GROUP : "teacher assignes"
+    
+    
+    USER zero or more to zero or more MESSAGES : "teacher read/write"
+    USER zero or more to zero or more MESSAGES : "student read"
+
+    CLASSROOM one to one DISCUSSIONFORUM : ""
+    CLASSROOM one to one MESSAGES : ""
+    USER zero or more to zero or more DISCUSSIONFORUM : "read/write"
+    
+    USER{
+        int userId PK
+        string firstName
+        string lastName
+        string email
+        string role
+    }
+    
+    CLASSROOM{
+        int    classroomId PK
+        int    ownerId FK
+        string classroomName
+        string classroomCode
+    }
+    
+    GROUP{
+        int accessKeyId PK
+        int classroomId FK
+        int userId FK
+    }
+
+    MESSAGES{
+        int messageId PK
+        int classroomId FK
+        int userId FK
+        string message
+    }
+    
+    DISCUSSIONFORUM{
+        int discussionId PK
+        int classroomId FK
+        int userId FK
+        int replyToId
+        string message
+    }
+```
 
 ## Del 3: Datadefinisjon (DDL) og Mock-Data
 
