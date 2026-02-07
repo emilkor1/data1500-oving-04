@@ -48,8 +48,6 @@ mulighet til å skrive ingen, en eller mange meldinger.
 ```mermaid
 ---
 title: Datamodell
-config:
-  layout: elk
 ---
 erDiagram
     USER one or more to one or more CLASSROOM : "teacher makes"
@@ -76,8 +74,6 @@ erDiagram
 ```mermaid
 ---
 title: Datamodell
-config:
-  layout: elk
 ---
 erDiagram
     USER one or more to one or more CLASSROOM : "teacher makes"
