@@ -29,46 +29,40 @@ I et klasserom kan studentene lese beskjeder fra læreren. Hvert klasserom har o
 
 **Ditt svar:**
 
-Den konseptuelle datamodellen ser teknisk ut, men er relativ triviell. Det er totalt sett 2 brukere,
-lærere og studenter. Jeg antar at kun lærere har lov til å opprette klasserom og grupper. Det er ikke
-strengt nødvendig for en lærer å opprette en gruppe og derav null eller flere til null eller flere.
+Den konseptuelle datamodellen ser teknisk ut, men er relativ triviell. Konseptet bygger seg rundt en klasse bruker
+som kan ha ulike roller, eksempelvis "LÆRER" eller "STUDENT". Jeg antar at kun brukere med rollen "LÆRER" har rettigheter
+til å opprette klasserom og grupper. Det er ikke strengt nødvendig for en lærer å opprette en gruppe og derav null eller
+flere til null eller flere.
 
 Deretter kan en gruppe gi tilgang til ett eller flere klasserom og en student kan bli lagt inn i en
-eller flere grupper. Dermed vil gruppen virke som en tilgangskontroll for klasserommet.
+eller flere grupper av en bruker med rollen LÆERER. Dermed vil gruppen virke som en tilgangskontroll for klasserommet.
 
-Videre kan lærere skrive beskjeder til et klasserom og studenter kan lese dette betinget at de har riktig
-gruppetilhørighet. 
+Videre kan brukere med rollen LÆRER skrive beskjeder til et klasserom og brukere med rollen STUDENTER kan lese dette
+betinget at de har riktig gruppetilhørighet. 
 
-Jeg antar at diskusjonsformuet arver tilgangskontrollen til klasserommet. Her har både lærere og studenter
+Jeg antar at beskjeder og diskusjonsformuet arver tilgangskontrollen til klasserommet. I tabellen for beskjeder har lærere
+lov til å både skrive og lese men studenter har kun lov til å lese. I diskusjonsformuet har både lærere og studenter
 mulighet til å skrive ingen, en eller mange meldinger.
 
 ```mermaid
 ---
-title: Data model
+title: Datamodell
 config:
   layout: elk
 ---
 erDiagram
-    TEACHER one or more to one or more CLASSROOM : makes
-    TEACHER zero or more to zero or more GROUP : makes
-    
-    STUDENT zero or more to zero or more GROUP : assigned
+    USER one or more to one or more CLASSROOM : "teacher makes"
     GROUP zero or more to zero or more CLASSROOM : allows
+    USER zero or more to zero or more GROUP : "student assigned"
+    USER zero or more to zero or more GROUP : "teacher assignes"
     
     
-    TEACHER zero or more to zero or more CLASSROOM : write
-    STUDENT zero or more to zero or more CLASSROOM : read
+    USER zero or more to zero or more MESSAGES : "teacher read/write"
+    USER zero or more to zero or more MESSAGES : "student read"
 
     CLASSROOM one to one DISCUSSIONFORUM : ""
-    TEACHER zero or more to zero or more DISCUSSIONFORUM : "read/write"
-    STUDENT zero or more to zero or more DISCUSSIONFORUM : "read/write"
-
-
-    STUDENT{}
-    TEACHER{}
-    CLASSROOM{}
-    GROUP{}
-    DISCUSSIONFORUM{}
+    CLASSROOM one to one MESSAGES : ""
+    USER zero or more to zero or more DISCUSSIONFORUM : "read/write"
 ```
 
 ## Del 2: Logisk Skjema (Tabellstruktur)
