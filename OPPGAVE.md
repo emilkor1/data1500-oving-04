@@ -27,8 +27,49 @@ I et klasserom kan studentene lese beskjeder fra læreren. Hvert klasserom har o
 
 **Oppgave:** Beskriv en konseptuell datamodell (med tekst eller ER-diagram) for systemet. Modellen skal kun inneholde entiteter, som du har valgt, og forholdene mellom dem, med kardinalitet. Du trenger ikke spesifisere attributter i denne delen.
 
-**Ditt svar:***
+**Ditt svar:**
 
+Den konseptuelle datamodellen ser teknisk ut, men er relativ triviell. Det er totalt sett 2 brukere,
+lærere og studenter. Jeg antar at kun lærere har lov til å opprette klasserom og grupper. Det er ikke
+strengt nødvendig for en lærer å opprette en gruppe og derav null eller flere til null eller flere.
+
+Deretter kan en gruppe gi tilgang til ett eller flere klasserom og en student kan bli lagt inn i en
+eller flere grupper. Dermed vil gruppen virke som en tilgangskontroll for klasserommet.
+
+Videre kan lærere skrive beskjeder til et klasserom og studenter kan lese dette betinget at de har riktig
+gruppetilhørighet. 
+
+Jeg antar at diskusjonsformuet arver tilgangskontrollen til klasserommet. Her har både lærere og studenter
+mulighet til å skrive ingen, en eller mange meldinger.
+
+```mermaid
+---
+title: Data model
+config:
+  layout: elk
+---
+erDiagram
+    TEACHER one or more to one or more CLASSROOM : makes
+    TEACHER zero or more to zero or more GROUP : makes
+    
+    STUDENT zero or more to zero or more GROUP : assigned
+    GROUP zero or more to zero or more CLASSROOM : allows
+    
+    
+    TEACHER zero or more to zero or more CLASSROOM : write
+    STUDENT zero or more to zero or more CLASSROOM : read
+
+    CLASSROOM one to one DISCUSSIONFORUM : ""
+    TEACHER zero or more to zero or more DISCUSSIONFORUM : "read/write"
+    STUDENT zero or more to zero or more DISCUSSIONFORUM : "read/write"
+
+
+    STUDENT{}
+    TEACHER{}
+    CLASSROOM{}
+    GROUP{}
+    DISCUSSIONFORUM{}
+```
 
 ## Del 2: Logisk Skjema (Tabellstruktur)
 
