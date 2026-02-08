@@ -147,11 +147,14 @@ lese og skrive til de ulike tabellene basert på rollene til brukerne og hvilke 
 ### 1. Finn de 3 nyeste beskjeder fra læreren i et gitt klasserom (f.eks. klasserom_id = 1).
 
 *   **Relasjonsalgebra:**
-    > 
+    > `τ_{created_at DESC}(σ_{classroom_id = 1}(limit(3)(messages)))`
 
 *   **SQL:**
     ```sql
-    
+    SELECT * FROM messages
+    WHERE classroom_id = 1
+    ORDER BY (created_at) DESC
+    LIMIT 3;
     ```
 
 ### 2. Vis en hel diskusjonstråd startet av en spesifikk student (f.eks. avsender_id = 2).
@@ -163,27 +166,42 @@ lese og skrive til de ulike tabellene basert på rollene til brukerne og hvilke 
 
     Du kan vente med denne oppgaven til vi har gått gjennom avanserte SQL-spørringer (tips: må bruke en rekursiv konstruksjon `WITH RECURSIVE diskusjonstraad AS (..) SELECT FROM diskusjonstraad ...`)
     ```sql
-    
+    WITH RECURSIVE diskusjonstraad AS (
+        SELECT discussion_id, user_id, reply_to_id, title, message, created_at FROM discussionforum
+        WHERE discussion_id = 1
+
+        UNION ALL
+
+        SELECT df.discussion_id, df.user_id, df.reply_to_id, df.title, df.message, df.created_at FROM discussionforum AS df
+        JOIN diskusjonstraad AS dt
+        ON df.reply_to_id = dt.discussion_id
+    )
+
+    SELECT * FROM diskusjonstraad;
     ```
 
 ### 3. Finn alle studenter i en spesifikk gruppe (f.eks. gruppe_id = 1).
 
 *   **Relasjonsalgebra:**
-    > 
+    > `(σ_{classroom_id = 1}(count(user_id)(messages)))`
 
 *   **SQL:**
     ```sql
-    
+    SELECT COUNT(user_id) FROM groups
+    WHERE classroom_id = 1;
     ```
 
 ### 4. Finn antall grupper.
 
 *   **Relasjonsalgebra (med aggregering):**
-    > 
+    > `π(count(*)(π_{classroom_id}(group(classroom_id)(groups))))`
 
 *   **SQL:**
     ```sql
-    
+    SELECT COUNT(*) FROM (
+        SELECT classroom_id FROM groups
+        GROUP BY classroom_id
+    ) AS grouped
     ```
 
 ## Del 5: Implementer i postgreSQL i din Docker container
