@@ -114,7 +114,9 @@ erDiagram
         int messageId PK
         int classroomId FK
         int userId FK
+        string title
         string message
+        timestamp createdAt
     }
     
     DISCUSSIONFORUM{
@@ -122,7 +124,9 @@ erDiagram
         int classroomId FK
         int userId FK
         int replyToId
+        string title
         string message
+        timestamp createdAt
     }
 ```
 

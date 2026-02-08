@@ -41,7 +41,9 @@ CREATE TABLE IF NOT EXISTS messages (
     message_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     classroom_id INT NOT NULL,
+    title VARCHAR(50) NOT NULL,
     message VARCHAR(200) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_user_id
         FOREIGN KEY (user_id)
@@ -57,7 +59,9 @@ CREATE TABLE IF NOT EXISTS discussionforum (
     user_id INT NOT NULL,
     classroom_id INT NOT NULL,
     reply_to_id INT,
+    title VARCHAR(50), -- assuming replies to existing threads does not require new titles.
     message VARCHAR(200) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_user_id
         FOREIGN KEY (user_id)
@@ -85,15 +89,15 @@ INSERT INTO groups (user_id, classroom_id) VALUES
 ON CONFLICT DO NOTHING;
 
 -- Write a message from teacher to students
-INSERT INTO messages (user_id, classroom_id, message) VALUES
-    (2, 1, 'Exam is on 20th of may!')
+INSERT INTO messages (user_id, classroom_id, title, message) VALUES
+    (2, 1, 'Important!', 'Exam is on 20th of may!')
 ON CONFLICT DO NOTHING;
 
 -- Create a discussion forum with nested chat
-INSERT INTO discussionforum (user_id, classroom_id, reply_to_id, message) VALUES
-    (2, 1, NULL, 'How do we answer question 1?'),
-    (1, 1, 1, 'Push your code to git.'),
-    (2, 1, 2, 'Thanks for the response.')
+INSERT INTO discussionforum (user_id, classroom_id, reply_to_id, title, message) VALUES
+    (2, 1, NULL, 'Question 1', 'How do we answer question 1?'),
+    (1, 1, 1, NULL, 'Push your code to git.'),
+    (2, 1, 2, NULL, 'Thanks for the response.')
 ON CONFLICT DO NOTHING;
 
 -- Vis at initialisering er fullført
