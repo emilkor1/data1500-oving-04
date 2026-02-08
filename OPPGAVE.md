@@ -131,8 +131,10 @@ erDiagram
 **Oppgave:** Skriv SQL-setninger for å opprette tabellstrukturen (DDL - Data Definition Language) og sett inn realistiske mock-data for å simulere bruk av systemet.
 
 
-**Ditt svar:***
+**Ditt svar:**
 
+Se filen `init-scripts/01-init-database.sql`. Det som ikke er en del av svaret er policies for hvem som har lov til å
+lese og skrive til de ulike tabellene basert på rollene til brukerne og hvilke grupper de tilhører.
 
 ## Del 4: Spørringer mot Databasen
 
